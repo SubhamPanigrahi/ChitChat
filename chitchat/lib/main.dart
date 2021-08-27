@@ -16,6 +16,14 @@ class ChitChat extends StatelessWidget {
         ),
       ),
       home: WelcomeScreen(),
+      initialRoute: WelcomeScreen.id,
+      routes: {
+        //'welcome_screen' : (context) => WelcomeScreen(),
+        WelcomeScreen.id : (context) => WelcomeScreen(), // This is better practice
+        LoginScreen.id : (context) => LoginScreen(),
+        RegistrationScreen.id : (context) => RegistrationScreen(),
+        ChatScreen.id : (context) => ChatScreen(), 
+      },
     );
   }
 }
