@@ -1,29 +1,54 @@
+import 'package:chatapp/helper/authenticate.dart';
+import 'package:chatapp/helper/helperfunctions.dart';
+import 'package:chatapp/views/chatrooms.dart';
 import 'package:flutter/material.dart';
-import 'package:flash_chat/screens/welcome_screen.dart';
-import 'package:flash_chat/screens/login_screen.dart';
-import 'package:flash_chat/screens/registration_screen.dart';
-import 'package:flash_chat/screens/chat_screen.dart';
 
-void main() => runApp(ChitChat());
+void main() {
+  runApp(MyApp());
+}
 
-class ChitChat extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  bool userIsLoggedIn;
+
+  @override
+  void initState() {
+    getLoggedInState();
+    super.initState();
+  }
+
+  getLoggedInState() async {
+    await HelperFunctions.getUserLoggedInSharedPreference().then((value){
+      setState(() {
+        userIsLoggedIn  = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.dark().copyWith(
-        textTheme: TextTheme(
-          bodyText2: TextStyle(color: Colors.black54),
+      title: 'FlutterChat',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: Color(0xff145C9E),
+        scaffoldBackgroundColor: Color(0xff1F1F1F),
+        accentColor: Color(0xff007EF4),
+        fontFamily: "OverpassRegular",
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: userIsLoggedIn != null ?  userIsLoggedIn ? ChatRoom() : Authenticate()
+          : Container(
+        child: Center(
+          child: Authenticate(),
         ),
       ),
-      home: WelcomeScreen(),
-      initialRoute: WelcomeScreen.id,
-      routes: {
-        //'welcome_screen' : (context) => WelcomeScreen(),
-        WelcomeScreen.id : (context) => WelcomeScreen(), // This is better practice
-        LoginScreen.id : (context) => LoginScreen(),
-        RegistrationScreen.id : (context) => RegistrationScreen(),
-        ChatScreen.id : (context) => ChatScreen(), 
-      },
     );
   }
 }
